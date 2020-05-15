@@ -159,7 +159,10 @@
 			</div>
 			<div class="col-md-3">
 			<div class="card" style="width: 18rem; margin-top: 6px">
-			
+					<form action="/gaoliang" method="post">
+						<input type="text" name="gao" value="${gao }">
+						<input type="submit" value="高亮显示">
+					</form>
 					<div class="card-header">节目单</div>
 					<div class="card-body">
 						<c:forEach items="${order}" var="order">
@@ -211,10 +214,12 @@
 			var hot = '${article.hot}';//热点
 			if(key!=null){
 				location= "/search?channelId=" + channelId + "&page=" + page+"&key="+key;
-			}else{
+			}
+			else{
 				location = "/?page=" + page + "&channelId=" + channelId
 				+ "&categoryId=" + categoryId + "&hot=" + hot
 			}
+			
 		}
 		//注册
 		function reg() {

@@ -179,11 +179,10 @@ public class IndexController {
 		if (user != null) {
 			collect = collects.selectByTitleAndUserId(show.getTitle(), user.getId());
 		}
-
 		// 文章点击量加1
 		// 获取文章的id
 		Integer id = article.getId();
-		// 获取访问的ip地址
+		// 获取访问的用户ip地址
 		String addr = res.getRemoteAddr();
 		// 拼接key值存入到redis中
 		String redisKey = "Hits_" + id + "_" + addr;
@@ -202,6 +201,7 @@ public class IndexController {
 					art.update(article);
 					// 往Redis保存key为Hits_${文章ID}_${用户IP地址}，value为空值的记录，而且有效时长为5分钟。
 					redisTemplate.opsForValue().set(redisKey, "", 5, TimeUnit.MINUTES);
+					System.err.println("此文章点击量成功+1");
 				}
 			});
 		}
@@ -314,5 +314,14 @@ public class IndexController {
 		}
 		art.add(order);
 		return "redirect:index";
+	}
+	//高亮显示
+	@RequestMapping("gaoliang")
+	public String gao(String gao,Model m,@RequestParam(defaultValue = "1")int pageNum) {
+		PageInfo<Article> info = (PageInfo<Article>) HLUtils.findByHighLight(elasticsearchTemplate, Article.class, pageNum, 3, new String[] {"title"}, "id", gao);
+		List<Article> list = info.getList();
+		m.addAttribute("g", list);
+		m.addAttribute("gao", gao);
+		return "index/index";
 	}
 }

@@ -16,7 +16,7 @@
 
 	<!-- spring-beans.xml加载的时候,同时加载redis.xml -->
 	<import resource="classpath:redis.xml" />
-	
+	<import resource="classpath:producer.xml" />
 	
 		<!-- spring线程池的配置 -->
 	<task:executor id="executor" pool-size="10-1000"
